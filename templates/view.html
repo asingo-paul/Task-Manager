@@ -1,0 +1,3 @@
+{% for t in tasks %}
+    <p>{{ t.id }} - {{ t.title }} - {{ 'Done' if t.done else 'Pending' }}</p>
+{% endfor %}

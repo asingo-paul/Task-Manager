@@ -1,11 +1,24 @@
 import os 
 import sys
 import json
+from flask import Flask, render_template, url_for
+
+
+app = Flask(__name__, 
+            static_folder='static',      
+            static_url_path='/static') 
 
 
 
 task = []
 
+@app.route('/')
+def home():
+
+    return render_template('home.html')
+
+
+@app.route('/main')
 def main():
     while True:
         print("\nTask Manager Menu")
@@ -32,11 +45,11 @@ def main():
         else:
             print("Invalid choice, please enter 1–5")
 
-            
+    # return render_template('home.html')
 
-
-
+@app.route('/add', methods=['POST', 'GET'])
 def add_task():
+    title = request.form.get("title")
     id = int(input("Enter id: "))
     title = input("Enter the title: ")
     done = input("Is the task completed? (y/n): ")
@@ -56,18 +69,20 @@ def add_task():
         "title": title,
         "done": done_status
     }
-    
     task.append(task_item)
     print("Task Added!")
     print(task)
 
+    return render_template('add.html')
 
-
+@app.route('/save', methods=['POST', 'GET'])
 def save_task():
 
     with open("task.json", "w") as file:
         json.dump(task, file, indent=4)
 
+
+@app.route('/load', methods=['POST', 'GET'])
 def load_task():
     global task
     try:
@@ -76,6 +91,7 @@ def load_task():
     except FileNotFoundError:
         task = []
 
+@app.route('/view', methods=['POST', 'GET'])
 def view_task():
 
     if task == []:
@@ -84,7 +100,9 @@ def view_task():
         status = "complete" if i['done'] else "incomplete"
         print(f"ID: {i['id']} | Title: {i['title']} | Status: {status}")
 
+    return render_template('view.html')
 
+@app.route('/delete', methods=['POST', 'GET'])
 def delete_task():
     delete = int(input("enter the what task ID you want to delete: "))
 
@@ -101,9 +119,11 @@ def delete_task():
             break
     if not found:
         print("ID not found! Try another one please!")
+
+    return render_template('delete.html')
             
        
-
+@app.route('/mark', methods=['POST', 'GET'])
 def mark_completed():
     mark = int(input("Enter a task ID: "))
     found = False
@@ -120,20 +140,17 @@ def mark_completed():
     if not found:
         print("Task not found!")
 
+    return render_template('mark.html')
 
-
-           
-
-
-
-
-main()
-load_task()
-add_task()
-save_task()
-view_task()
-delete_task()
-mark_completed()
+if __name__ == '__main__':
+    app.run(debug=True)
+    # home()
+    # load_task()
+    # add_task()
+    # save_task()
+    # view_task()
+    # delete_task()
+    # mark_completed()
 
 
 
