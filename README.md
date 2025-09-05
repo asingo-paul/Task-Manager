@@ -27,8 +27,8 @@ task-manager/
 1. Clone the repo
 
    ```bash
-   git clone https://github.com/your-username/task-manager-cli.git
-   cd task-manager-cli
+   git clone git@github.com:asingo-paul/Task-Manager.git
+   cd Task-Manager
    ```
 
 2. Run the script
@@ -47,7 +47,7 @@ task-manager/
    5. Exit
    ```
 
-## 📖 Example
+## Example
 
 ```bash
 Enter id: 1
