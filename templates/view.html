@@ -1,3 +1,33 @@
-{% for t in tasks %}
-    <p>{{ t.id }} - {{ t.title }} - {{ 'Done' if t.done else 'Pending' }}</p>
-{% endfor %}
+{% extends "base.html" %}
+{% block content %}
+  <h2>All Tasks</h2>
+  {% if tasks %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in tasks %}
+          <tr>
+            <td>{{ t.id }}</td>
+            <td>{{ t.title }}</td>
+            <td>{{ "Completed" if t.done else "Incomplete" }}</td>
+            <td>
+              <a href="{{ url_for('mark_completed', task_id=t.id) }}" class="btn btn-sm btn-warning">Mark</a>
+              <a href="{{ url_for('delete_task', task_id=t.id) }}" class="btn btn-sm btn-danger">Delete</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <a href="{{ url_for('home') }}" class="btn btn-sm btn-danger">Back</a>
+   
+  {% else %}
+    <p class="text-muted">No tasks available.</p>
+  {% endif %}
+{% endblock %}
