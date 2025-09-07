@@ -1,7 +1,7 @@
 import json
 from flask import Flask, render_template, request, redirect, url_for
 
-app = Flask(__name__,
+application = Flask(__name__,
             static_folder='static',
             static_url_path='/static')
 
@@ -20,15 +20,15 @@ def save_tasks(tasks):
 # In-memory store
 tasks = load_tasks()
 
-@app.route('/')
+@application.route('/')
 def home():
     return render_template('home.html')
 
-@app.route('/view')
+@application.route('/view')
 def view_task():
     return render_template('view.html', tasks=tasks)
 
-@app.route('/add', methods=['GET', 'POST'])
+@application.route('/add', methods=['GET', 'POST'])
 def add_task():
     if request.method == 'POST':
         title = request.form.get("title")
@@ -49,14 +49,14 @@ def add_task():
 
     return render_template('add.html')
 
-@app.route('/delete/<int:task_id>')
+@application.route('/delete/<int:task_id>')
 def delete_task(task_id):
     global tasks
     tasks = [t for t in tasks if t["id"] != task_id]
     save_tasks(tasks)
     return render_template('delete.html')
 
-@app.route('/mark/<int:task_id>')
+@application.route('/mark/<int:task_id>')
 def mark_completed(task_id):
     for t in tasks:
         if t["id"] == task_id:
@@ -66,4 +66,4 @@ def mark_completed(task_id):
     return render_template('mark.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    application.run(debug=True)
